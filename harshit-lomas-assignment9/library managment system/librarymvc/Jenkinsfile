@@ -1,0 +1,51 @@
+pipeline {
+    agent any
+    
+    tools{
+        maven "maven3.6"
+    }
+
+
+  stages {
+    
+        stage("Checkout code"){
+            steps
+            {
+                checkout([$class: 'GitSCM', branches: [[name: '*/assignment9']], extensions: [], userRemoteConfigs: [[credentialsId: 'cafabd6b-7931-46a9-829e-9c476bcf8c11', url: 'https://git.nagarro.com/GITG00641/Java/saurabh-saini.git']]])
+                echo 'Check Out'
+            }
+        }
+        stage('Clean') {
+            steps {
+                bat 'mvn -f  libraryManagmentSystem/librarymvc/pom.xml clean'
+                echo 'Cleaning..'
+            }
+        }
+        stage('Compile') {
+            steps {
+                bat 'mvn -f libraryManagmentSystem/librarymvc/pom.xml compile'
+                echo 'Compiling..'
+            }
+        }
+        stage('Test') {
+            steps {
+                bat 'mvn -f libraryManagmentSystem/librarymvc/pom.xml test'
+                echo 'Testing..'
+            }
+        }
+        stage('Packaging') {
+            steps {
+                bat 'mvn -f libraryManagmentSystem/librarymvc/pom.xml package'
+                echo 'Packageing..'
+            }
+        }
+        stage('Install') {
+            steps {
+                bat 'mvn -f libraryManagmentSystem/librarymvc/pom.xml install'
+                echo 'Installing..'
+            }
+        }
+        
+      
+    }
+}
